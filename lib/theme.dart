@@ -26,7 +26,7 @@ abstract class AppColors {
   static const cupertinoGray = Color(0xFFF9F9F9);
   static const cupertinoDivider = Color(0xFFDCDCDC);
 
-  static const primary = Color(0xFF046b6a);
+  static const primary = Color(0xFFA5A28E);
   static const violet600 = Color(0xFF5d0ec2);
   static const skyblue_end = Color(0xFFEAF5FF);
   static const skyblue_start = Color(0xFF698FBC);

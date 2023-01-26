@@ -28,7 +28,7 @@ class App extends StatelessWidget {
 }
 
 abstract class Routes {
-  static const HOME = '/home';
+  static const HOME = '/';
   static const GEARS = '/gears';
 }
 

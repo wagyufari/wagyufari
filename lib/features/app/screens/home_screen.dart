@@ -209,20 +209,22 @@ class Gear extends StatelessWidget {
                     Text(
                       "All the things I use for my daily work as a Remote Software Engineer",
                       style: GoogleFonts.inter(
-                          color: AppColors.textPrimary, fontSize: 20),
+                          color: AppColors.textPrimary, fontSize: context.isSmall() ? 16 : context.isMedium() ? 18 : 20),
                     ),
                   ],
                 ),
               ),
               context.isSmall() ? verticalSpacer(height: 24) : Spacer(),
-              GridView.count(
-                crossAxisCount: 3,
-                crossAxisSpacing: 16,
-                mainAxisSpacing: 16,
-                shrinkWrap: true,
-                children: [
-                  for (var gear in Dummy.gearsLite) _buildImage(gear.imageName)
-                ],
+              AbsorbPointer(
+                child: GridView.count(
+                  crossAxisCount: 3,
+                  crossAxisSpacing: 16,
+                  mainAxisSpacing: 16,
+                  shrinkWrap: true,
+                  children: [
+                    for (var gear in Dummy.gearsLite) _buildImage(gear.imageName)
+                  ],
+                ),
               ),
             ],
           ),
