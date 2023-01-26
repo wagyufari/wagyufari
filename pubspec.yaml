@@ -9,10 +9,10 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_web_plugins:
+    sdk: flutter
   # Service locator
   get_it: ^7.2.0
-  # Bloc for state management
-  flutter_bloc: ^8.1.1
   # Value equality
   equatable: ^2.0.5
   # Functional programming thingies
@@ -38,6 +38,7 @@ dependencies:
 
   flutter_phoenix: ^1.1.0
   scroll_to_index: ^3.0.1
+  flutter_staggered_grid_view: ^0.6.2
 
   visibility_detector: ^0.3.3
   google_sign_in: ^5.4.3
@@ -46,6 +47,10 @@ dependencies:
   parallax_animation: ^0.0.3
 
   flutter_circular_text: ^0.3.1
+  url_launcher: ^6.1.8
+  flutter_layout_grid: ^2.0.1
+  get: ^4.6.5
+  flutter_bloc: ^8.1.1
 
   flutter_localizations:
     sdk: flutter
@@ -72,4 +77,20 @@ flutter:
     - assets/ig.png
     - assets/ig_selected.png
     - assets/github.png
+    - assets/dzikirqu.png
     - assets/github_selected.png
+    - assets/iphone12.png
+    - assets/pocof3.png
+    - assets/xiaomi4k.png
+    - assets/xiaomi34.png
+    - assets/leband.png
+    - assets/ultimo.png
+    - assets/mxkeys.png
+    - assets/mxmaster.png
+    - assets/lumiarm.png
+    - assets/standingdesk.png
+    - assets/razerbarx.png
+    - assets/mbam1.png
+    - assets/mbstand.png
+    - assets/lention.png
+    - assets/setup.jpeg

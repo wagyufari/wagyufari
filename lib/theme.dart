@@ -31,6 +31,8 @@ abstract class AppColors {
   static const skyblue_end = Color(0xFFEAF5FF);
   static const skyblue_start = Color(0xFF698FBC);
 
+  static const linkblue = Color(0xFF072856);
+
 }
 
 

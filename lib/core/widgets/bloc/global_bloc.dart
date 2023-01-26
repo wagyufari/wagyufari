@@ -8,28 +8,17 @@ part 'global_state.dart';
 
 class GlobalBloc extends Bloc<GlobalEvent, GlobalState> {
   GlobalBloc() : super(None()) {
-    on<SnackBarEvent>((event, emit) {
-      emit(SnackBarState("${event.message}"));
-    });
-    on<LoadingEvent>((event, emit) {
-      emit(LoadingState());
-    });
     on<NoneEvent>((event, emit) {
       emit(NoneState());
     });
-
+    on<PushEvent>((event, emit) {
+      emit(PushState(event.identifier));
+    });
   }
 }
 
-void showLoading(BuildContext context){
-  context.read<GlobalBloc>().add(LoadingEvent());
-}
-
-void hideLoading(BuildContext context){
-  context.read<GlobalBloc>().add(NoneEvent());
-}
-
-
-void showSnackbar(BuildContext context, {String? message}){
-  context.read<GlobalBloc>().add(SnackBarEvent(message: message));
+class RxBus{
+  static void send(BuildContext context, String identifier) {
+    context.read<GlobalBloc>().add(PushEvent(identifier));
+  }
 }

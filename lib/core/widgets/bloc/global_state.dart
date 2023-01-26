@@ -4,15 +4,10 @@ part of 'global_bloc.dart';
 abstract class GlobalState {}
 
 class None extends GlobalState {}
-class SnackBarState extends GlobalState{
-  final String message;
+class PushState extends GlobalState{
+  final String identifier;
 
-  SnackBarState(this.message);
-}
-
-class LoadingState extends GlobalState{
-
+  PushState(this.identifier);
 }
 class NoneState extends GlobalState{
-
 }

@@ -7,10 +7,10 @@ abstract class GlobalEvent {
 
 class NoneEvent extends GlobalEvent{}
 
-class SnackBarEvent extends GlobalEvent{
-  final String? message;
 
-  SnackBarEvent({this.message});
+class PushEvent extends GlobalEvent{
+  final String identifier;
+
+  PushEvent(this.identifier);
+
 }
-
-class LoadingEvent extends GlobalEvent{}
