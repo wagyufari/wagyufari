@@ -38,8 +38,8 @@ class GearsScreen extends StatelessWidget {
                             ? Flexible(
                                 flex: 1,
                                 child: Padding(
-                                  padding:
-                                      const EdgeInsets.symmetric(horizontal: 16),
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 16),
                                   child: buildColumn(),
                                 ))
                             : Container(
@@ -52,7 +52,9 @@ class GearsScreen extends StatelessWidget {
                 ),
               ],
             ),
-            SideBar(selectedIndex: 1,)
+            SideBar(
+              selectedIndex: 1,
+            )
           ],
         ),
       ),
@@ -110,16 +112,8 @@ class _Gears extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(
-        color: AppColors.neutral_50,
-        border: Border.all(
-          color: AppColors.neutral_300,
-          width: 1,
-        ),
-        borderRadius: BorderRadius.circular(context.isSmall() ? 16 : 24),
-      ),
       child: Padding(
-        padding: EdgeInsets.all(context.isSmall() ? 16 : 24),
+        padding: EdgeInsets.symmetric(vertical: context.isSmall() ? 16 : 24),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -166,20 +160,18 @@ class _GearsGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    print("Reloaded");
+
     List<TrackSize> trackSize = [];
     for (var i = 0; i < (gears.length / 2).ceil(); i++) {
       trackSize.add(auto);
     }
     return LayoutGrid(
-      // set some flexible track sizes based on the crossAxisCount
       columnSizes: [1.fr, 1.fr],
-      // set all the row sizes to auto (self-sizing height)
       rowSizes: trackSize,
       rowGap: context.isSmall() ? 12 : 24,
-      // equivalent to mainAxisSpacing
       columnGap: context.isSmall() ? 12 : 24,
-      // equivalent to crossAxisSpacing
-      // note: there's no childAspectRatio
       children: [for (var gear in gears) _buildGear(context.isSmall(), gear)],
     );
   }
@@ -195,7 +187,10 @@ class _GearsGrid extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                _ImageHover(gear: gear),
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Image(image: AssetImage("assets/${gear.imageName}")),
+                ),
                 Container(
                   width: double.infinity,
                   height: 1,
@@ -234,44 +229,4 @@ class _GearsGrid extends StatelessWidget {
             ),
           ),
         );
-}
-
-class _ImageHover extends StatefulWidget {
-  const _ImageHover({
-    Key? key,
-    required this.gear,
-  }) : super(key: key);
-
-  @override
-  State<_ImageHover> createState() => _ImageHoverState();
-
-  final Gear gear;
-}
-
-class _ImageHoverState extends State<_ImageHover> {
-  bool isHovering = false;
-
-  @override
-  Widget build(BuildContext context) {
-    return MouseRegion(
-      onHover: (f) {
-        setState(() {
-          isHovering = true;
-        });
-      },
-      onExit: (f) {
-        setState(() {
-          isHovering = false;
-        });
-      },
-      child: AnimatedScale(
-        scale: isHovering ? 1.2 : 1,
-        duration: Duration(milliseconds: 200),
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Image(image: AssetImage("assets/${widget.gear.imageName}")),
-        ),
-      ),
-    );
-  }
 }

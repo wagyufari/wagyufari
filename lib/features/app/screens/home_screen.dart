@@ -21,18 +21,21 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-
   @override
   Widget build(BuildContext context) {
+    print("Called");
     return Scaffold(
       backgroundColor: Colors.white,
       body: Stack(
         children: [
           Column(
             children: [
-              MainHeader(selectedIndex: 0, onTapMenu: (){
-                SideBar.open(context);
-              },),
+              MainHeader(
+                selectedIndex: 0,
+                onTapMenu: () {
+                  SideBar.open(context);
+                },
+              ),
               Flexible(
                 flex: 1,
                 child: SelectionArea(
@@ -49,6 +52,12 @@ class _HomeScreenState extends State<HomeScreen> {
                           verticalSpacer(height: 24),
                           _ThirdRow(),
                           verticalSpacer(height: 64),
+                          Text(
+                            "© 2023 Wagyufari, All Rights Reserved",
+                            style: GoogleFonts.inter(
+                                fontSize: 16, color: AppColors.textSecondary),
+                          ),
+                          verticalSpacer(height: 16)
                         ],
                       ),
                     ),
@@ -57,7 +66,9 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ],
           ),
-          SideBar(selectedIndex: 0,)
+          SideBar(
+            selectedIndex: 0,
+          )
         ],
       ),
     );
@@ -157,7 +168,12 @@ class _SecondRowState extends State<_SecondRow> {
                               },
                               child: DzikirQu())),
                       horizontalSpacer(width: 24),
-                      Flexible(flex: 1, child: Gear(boxSize: boxSize,),)
+                      Flexible(
+                        flex: 1,
+                        child: Gear(
+                          boxSize: boxSize,
+                        ),
+                      )
                     ],
                   ),
                 ),
@@ -209,7 +225,12 @@ class Gear extends StatelessWidget {
                     Text(
                       "All the things I use for my daily work as a Remote Software Engineer",
                       style: GoogleFonts.inter(
-                          color: AppColors.textPrimary, fontSize: context.isSmall() ? 16 : context.isMedium() ? 18 : 20),
+                          color: AppColors.textPrimary,
+                          fontSize: context.isSmall()
+                              ? 16
+                              : context.isMedium()
+                                  ? 18
+                                  : 20),
                     ),
                   ],
                 ),
@@ -222,7 +243,8 @@ class Gear extends StatelessWidget {
                   mainAxisSpacing: 16,
                   shrinkWrap: true,
                   children: [
-                    for (var gear in Dummy.gearsLite) _buildImage(gear.imageName)
+                    for (var gear in Dummy.gearsLite)
+                      _buildImage(gear.imageName)
                   ],
                 ),
               ),
@@ -554,7 +576,7 @@ class _ThirdRow extends StatelessWidget {
     Size size = context.screenSize();
     return context.isSmall()
         ? Column(
-            children: [Insta()],
+            children: [],
           )
         : Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -565,7 +587,6 @@ class _ThirdRow extends StatelessWidget {
                   constraints: BoxConstraints(maxWidth: 1000),
                   child: Row(
                     children: [
-                      Flexible(flex: 1, child: Insta()),
                       Flexible(flex: 1, child: Container()),
                     ],
                   ),
