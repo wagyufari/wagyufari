@@ -26,6 +26,8 @@ class Dummy {
     gears[3],
     gears[4],
     gears[5],
+    gears[6],
+    gears[7],
   ];
 }
 

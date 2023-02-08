@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:get/route_manager.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:wagyufari/core/widgets/bloc/global_bloc.dart';
 import 'package:wagyufari/features/app/app_container.dart';
@@ -30,17 +29,4 @@ class App extends StatelessWidget {
 abstract class Routes {
   static const HOME = '/';
   static const GEARS = '/gears';
-}
-
-abstract class AppPages {
-  static final pages = [
-    GetPage(
-      name: Routes.HOME,
-      page: () => HomeScreen(),
-    ),
-    GetPage(
-      name: Routes.GEARS,
-      page: () => GearsScreen(),
-    )
-  ];
 }

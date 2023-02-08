@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_layout_grid/flutter_layout_grid.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 import 'package:wagyufari/core/widgets/bloc/global_bloc.dart';
@@ -11,7 +14,6 @@ import 'package:wagyufari/theme.dart';
 import 'package:wagyufari/utils/dummy.dart';
 import 'package:wagyufari/utils/responsive_widget.dart';
 import 'package:wagyufari/utils/widget_size.dart';
-import 'package:get/get.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -23,94 +25,203 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
-    print("Called");
     return Scaffold(
-      backgroundColor: Colors.white,
-      body: Stack(
-        children: [
-          Column(
-            children: [
-              MainHeader(
-                selectedIndex: 0,
-                onTapMenu: () {
-                  SideBar.open(context);
-                },
-              ),
-              Flexible(
-                flex: 1,
-                child: SelectionArea(
-                  child: SingleChildScrollView(
-                    child: Padding(
-                      padding: const EdgeInsets.all(16),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          verticalSpacer(height: context.isSmall() ? 16 : 64),
-                          _FirstRow(),
-                          verticalSpacer(height: 24),
-                          _SecondRow(),
-                          verticalSpacer(height: 24),
-                          _ThirdRow(),
-                          verticalSpacer(height: 64),
-                          Text(
-                            "© 2023 Wagyufari, All Rights Reserved",
-                            style: GoogleFonts.inter(
-                                fontSize: 16, color: AppColors.textSecondary),
-                          ),
-                          verticalSpacer(height: 16)
-                        ],
-                      ),
-                    ),
-                  ),
+        backgroundColor: Colors.white,
+        body: SingleChildScrollView(
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 24),
+            child: Align(
+              alignment: Alignment.center,
+              child: Container(
+                width: double.infinity,
+                constraints: BoxConstraints(maxWidth: 1400, minWidth: 300),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    _Logo(),
+                    _FirstRow(),
+                    verticalSpacer(height: 24),
+                    _SecondRow()
+                  ],
                 ),
               ),
-            ],
+            ),
           ),
-          SideBar(
-            selectedIndex: 0,
-          )
-        ],
+        ));
+  }
+}
+
+class _Logo extends StatelessWidget {
+  const _Logo({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: Padding(
+        padding: EdgeInsets.symmetric(vertical: 24),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  "Wagyufari",
+                  style: GoogleFonts.montserrat(
+                      fontSize: 32,
+                      fontWeight: FontWeight.w700,
+                      letterSpacing: -4),
+                ),
+                GestureDetector(
+                  onTap: () {
+                    launchUrlString(
+                        "https://api.whatsapp.com/send?phone=087778792230");
+                  },
+                  child: MouseRegion(
+                    cursor: SystemMouseCursors.click,
+                    child: Container(
+                        decoration: BoxDecoration(
+                            border: Border.all(
+                                color: AppColors.neutral_300, width: 1),
+                            borderRadius: BorderRadius.circular(8)),
+                        child: Padding(
+                          padding:
+                              EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                          child: Text(
+                            "Reach Me",
+                            style: GoogleFonts.inter(fontSize: 16),
+                          ),
+                        )),
+                  ),
+                )
+              ],
+            )
+          ],
+        ),
       ),
     );
   }
 }
 
-class _FirstRow extends StatelessWidget {
+class _FirstRow extends StatefulWidget {
   const _FirstRow({Key? key}) : super(key: key);
 
   @override
+  State<_FirstRow> createState() => _FirstRowState();
+}
+
+class _FirstRowState extends State<_FirstRow> {
+  Size contentSize = Size(0, 0);
+
+  @override
   Widget build(BuildContext context) {
-    Size size = context.screenSize();
-    return context.isSmall()
-        ? Column(
+    return context.isLarge()
+        ? Row(
             children: [
-              SizedBox(
-                  width: size.width,
-                  height: size.height * 0.4,
-                  child: ProfilePicture()),
-              verticalSpacer(height: 16),
-              SizedBox(width: size.width, child: Profile()),
+              profile(),
+              context.isLarge() ? horizontalSpacer(width: 24) : Container(),
+              context.isLarge()
+                  ? Flexible(flex: 1, child: badge(context))
+                  : Container()
             ],
           )
         : Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Flexible(
-                flex: 1,
-                child: Container(
-                  constraints: BoxConstraints(maxWidth: 1000),
-                  height: size.height * 0.5,
-                  child: Row(
-                    children: [
-                      Flexible(flex: 3, child: Profile()),
-                      horizontalSpacer(width: 24),
-                      Flexible(flex: 2, child: ProfilePicture()),
-                    ],
+          children: [
+            profile(),
+          ],
+        );
+  }
+
+  Widget badge(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        color: AppColors.neutral_50,
+        border: Border.all(
+          color: AppColors.neutral_300,
+          width: 1,
+        ),
+        borderRadius: BorderRadius.circular(24),
+      ),
+      height: contentSize.height,
+      width: double.infinity,
+      child: Padding(
+        padding: EdgeInsets.symmetric(vertical: 24),
+        child: context.isSmall()
+            ? Container()
+            : Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: badges(),
+              ),
+      ),
+    );
+  }
+
+  List<Widget> badges() {
+    return [
+      buildBadge(
+          context, "assets/androidev.png", Colors.white, "Since October 2019"),
+      verticalSpacer(height: 16),
+      buildBadge(
+          context, "assets/iosdev.png", Colors.black, "Since April 2021"),
+      verticalSpacer(height: 16),
+      buildBadge(
+          context, "assets/flutterdev.png", Colors.white, "Since January 2023"),
+    ];
+  }
+
+  Flexible profile() {
+    return Flexible(
+        flex: 3,
+        child: WidgetSize(
+            onChange: (size) {
+              setState(() {
+                contentSize = size;
+              });
+            },
+            child: Profile()));
+  }
+
+  Widget buildBadge(
+      BuildContext context, String image, Color color, String since) {
+    return Flexible(
+      flex: 1,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Flexible(
+            flex: 1,
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 24),
+              child: Container(
+                width: double.infinity,
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+                  child: Image(
+                    image: AssetImage(image),
                   ),
                 ),
+                decoration: BoxDecoration(
+                    color: color,
+                    borderRadius: BorderRadius.circular(16),
+                    boxShadow: AppTheme.boxShadow),
               ),
+            ),
+          ),
+          Column(
+            children: [
+              verticalSpacer(height: 8),
+              Text(
+                since,
+                style: GoogleFonts.inter(fontSize: 16),
+              )
             ],
-          );
+          )
+        ],
+      ),
+    );
   }
 }
 
@@ -144,111 +255,100 @@ class _SecondRowState extends State<_SecondRow> {
               verticalSpacer(height: 24),
               Container(
                 width: size.width,
-                child: Gear(boxSize: boxSize),
+                child: Gear(),
               )
             ],
           )
         : Row(
-            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Flexible(
                 flex: 1,
-                child: Container(
-                  constraints: BoxConstraints(maxWidth: 1000),
-                  height: boxSize.width == 0 ? size.height / 2 : boxSize.width,
-                  child: Row(
-                    children: [
-                      Flexible(
-                          flex: 1,
-                          child: WidgetSize(
-                              onChange: (s) {
-                                setState(() {
-                                  boxSize = s;
-                                });
-                              },
-                              child: DzikirQu())),
-                      horizontalSpacer(width: 24),
-                      Flexible(
-                        flex: 1,
-                        child: Gear(
-                          boxSize: boxSize,
-                        ),
-                      )
-                    ],
-                  ),
-                ),
+                child: Container(height: boxSize.height, child: DzikirQu()),
               ),
+              horizontalSpacer(width: 24),
+              Flexible(
+                  flex: 2,
+                  child: WidgetSize(
+                      onChange: (size) {
+                        setState(() {
+                          boxSize = size;
+                        });
+                      },
+                      child: Gear())),
             ],
           );
   }
 }
 
 class Gear extends StatelessWidget {
-  const Gear({Key? key, required this.boxSize}) : super(key: key);
-
-  final Size boxSize;
+  const Gear({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        Get.rootDelegate.toNamed(Routes.GEARS);
-      },
-      child: Container(
-        decoration: BoxDecoration(
-          color: AppColors.neutral_50,
-          border: Border.all(
-            color: AppColors.neutral_300,
-            width: 1,
+    return MouseRegion(
+      cursor: SystemMouseCursors.click,
+      child: GestureDetector(
+        onTap: () {
+          context.go(Routes.GEARS);
+        },
+        child: Container(
+          decoration: BoxDecoration(
+            color: AppColors.neutral_50,
+            border: Border.all(
+              color: AppColors.neutral_300,
+              width: 1,
+            ),
+            borderRadius: BorderRadius.circular(24),
           ),
-          borderRadius: BorderRadius.circular(24),
-        ),
-        width: boxSize.width,
-        height: context.isSmall() ? null : boxSize.height,
-        child: Padding(
-          padding: const EdgeInsets.all(24.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: EdgeInsets.only(right: 32.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      "Gears",
-                      style: GoogleFonts.inter(
-                          color: AppColors.textPrimary,
-                          fontSize: 28,
-                          fontWeight: FontWeight.bold),
-                    ),
-                    Text(
-                      "All the things I use for my daily work as a Remote Software Engineer",
-                      style: GoogleFonts.inter(
-                          color: AppColors.textPrimary,
-                          fontSize: context.isSmall()
-                              ? 16
-                              : context.isMedium()
-                                  ? 18
-                                  : 20),
-                    ),
-                  ],
+          child: Padding(
+            padding: const EdgeInsets.all(24.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Padding(
+                  padding: EdgeInsets.only(right: 32.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "Gears",
+                        style: GoogleFonts.inter(
+                            color: AppColors.textPrimary,
+                            fontSize: 28,
+                            fontWeight: FontWeight.bold),
+                      ),
+                      Text(
+                        "All the things I use for my daily work as a Remote Software Engineer",
+                        style: GoogleFonts.inter(
+                            color: AppColors.textPrimary,
+                            fontSize: context.isSmall()
+                                ? 16
+                                : context.isMedium()
+                                    ? 18
+                                    : 20),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-              context.isSmall() ? verticalSpacer(height: 24) : Spacer(),
-              AbsorbPointer(
-                child: GridView.count(
-                  crossAxisCount: 3,
-                  crossAxisSpacing: 16,
-                  mainAxisSpacing: 16,
-                  shrinkWrap: true,
-                  children: [
-                    for (var gear in Dummy.gearsLite)
-                      _buildImage(gear.imageName)
-                  ],
+                verticalSpacer(height: 24),
+                Flexible(
+                  flex: 1,
+                  child: AbsorbPointer(
+                    child: GridView.count(
+                      crossAxisCount: 4,
+                      crossAxisSpacing: 16,
+                      mainAxisSpacing: 16,
+                      shrinkWrap: true,
+                      children: [
+                        for (var gear in Dummy.gearsLite)
+                          _buildImage(gear.imageName)
+                      ],
+                    ),
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
@@ -288,6 +388,7 @@ class _DzikirQuState extends State<DzikirQu> {
         launchUrlString("https://github.com/wagyufari/dzikirqu-android");
       },
       child: MouseRegion(
+        cursor: SystemMouseCursors.click,
         onHover: (f) {
           setState(() {
             isHovering = true;
@@ -304,13 +405,9 @@ class _DzikirQuState extends State<DzikirQu> {
             scale: isHovering ? 1.1 : 1,
             curve: Curves.easeOut,
             duration: Duration(milliseconds: 500),
-            child: Container(
-              width: double.infinity,
-              height: double.infinity,
-              child: Image(
-                image: AssetImage("assets/dzikirqu.png"),
-                fit: BoxFit.cover,
-              ),
+            child: Image(
+              image: AssetImage("assets/dzikirqu.png"),
+              fit: BoxFit.cover,
             ),
           ),
         ),
@@ -345,14 +442,12 @@ class _ProfilePictureState extends State<ProfilePicture> {
         });
       },
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(24),
+        borderRadius: BorderRadius.circular(500),
         child: AnimatedScale(
           scale: isHovering ? 1.1 : 1,
           curve: Curves.easeOut,
           duration: Duration(milliseconds: 500),
           child: Container(
-            width: double.infinity,
-            height: double.infinity,
             child: Image(
               image: AssetImage("assets/profile.jpeg"),
               fit: BoxFit.cover,
@@ -365,145 +460,161 @@ class _ProfilePictureState extends State<ProfilePicture> {
 }
 
 class Profile extends StatefulWidget {
-  const Profile({
-    Key? key,
-  }) : super(key: key);
+  const Profile({Key? key}) : super(key: key);
 
   @override
   State<Profile> createState() => _ProfileState();
 }
 
 class _ProfileState extends State<Profile> {
-  bool isProfileHovering = false;
+  Size contentSize = Size(0, 0);
 
   @override
   Widget build(BuildContext context) {
-    return MouseRegion(
-      onHover: (f) {
-        setState(() {
-          isProfileHovering = true;
-        });
-      },
-      onExit: (f) {
-        setState(() {
-          isProfileHovering = false;
-        });
-      },
-      child: Container(
-        decoration: BoxDecoration(
-          color: AppColors.neutral_50,
-          border: Border.all(
-            color: AppColors.neutral_300,
-            width: 1,
-          ),
-          borderRadius: BorderRadius.circular(24),
+    return Container(
+      decoration: BoxDecoration(
+        color: AppColors.neutral_50,
+        border: Border.all(
+          color: AppColors.neutral_300,
+          width: 1,
         ),
-        child: Stack(
-          children: [
-            Padding(
-              padding: EdgeInsets.all(context.isSmall()
-                  ? 24
-                  : context.isMedium()
-                      ? 24
-                      : 32),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
+        borderRadius: BorderRadius.circular(24),
+      ),
+      child: Padding(
+        padding: EdgeInsets.all(context.isSmall()
+            ? 24
+            : context.isMedium()
+                ? 24
+                : 32),
+        child: context.isSmall()
+            ? Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Row(
-                    children: [
-                      Text(
-                        "Muhammad Ghifari",
-                        style: GoogleFonts.inter(
-                            fontSize: context.isSmall()
-                                ? 24
-                                : context.isMedium()
-                                    ? 32
-                                    : 44,
-                            color: AppColors.textPrimary,
-                            fontWeight: FontWeight.bold),
-                      ),
-                      horizontalSpacer(width: 8),
-                      SizedBox(
-                          height: context.isSmall()
-                              ? 24
-                              : context.isMedium()
-                                  ? 30
-                                  : 36,
-                          width: context.isSmall()
-                              ? 20
-                              : context.isMedium()
-                                  ? 30
-                                  : 36,
-                          child: Image(
-                            image: AssetImage("assets/apple_logo.png"),
-                            color: Colors.black,
-                            fit: BoxFit.cover,
-                          ))
-                    ],
-                  ),
-                  Text(
-                    "Mobile Engineer & UI/UX Enthusiast",
-                    style: GoogleFonts.inter(
-                        fontSize: context.isSmall()
-                            ? 20
-                            : context.isMedium()
-                                ? 22
-                                : 24,
-                        color: AppColors.textSecondary),
-                  ),
-                  verticalSpacer(height: 32),
-                  Text(
-                    "Native Android & iOS Engineer currently working at a SaaS company at Jakarta. Have been in the IT Industry for 3+ years, experienced in building complex applications and have a pretty good eye for design.",
-                    style: GoogleFonts.inter(
-                      fontSize: context.isSmall()
-                          ? 16
-                          : context.isMedium()
-                              ? 18
-                              : 20,
-                      color: AppColors.textTertiary,
-                    ),
-                  ),
-                  context.isSmall() ? verticalSpacer(height: 16) : Spacer(),
-                  Row(
-                    children: [
-                      InkWell(
-                        onTap: () {
-                          launchUrlString(
-                              "https://www.instagram.com/wagyufari/");
-                        },
-                        child: HoveringSocial(
-                          name: "ig",
-                        ),
-                      ),
-                      horizontalSpacer(width: 8),
-                      InkWell(
-                        onTap: () {
-                          launchUrlString(
-                              "https://www.linkedin.com/in/mayburger/");
-                        },
-                        child: HoveringSocial(
-                          name: "linkedin",
-                        ),
-                      ),
-                      horizontalSpacer(width: 8),
-                      InkWell(
-                        onTap: () {
-                          launchUrlString("https://github.com/wagyufari");
-                        },
-                        child: HoveringSocial(
-                          name: "github",
-                        ),
-                      )
-                    ],
-                  )
+                  profile(),
+                  verticalSpacer(height: 24),
+                  content(context)
+                ],
+              )
+            : Row(
+                children: [
+                  Flexible(flex: 1, child: content(context)),
+                  horizontalSpacer(width: 32),
+                  profile()
                 ],
               ),
-            ),
-          ],
-        ),
       ),
     );
+  }
+
+  SizedBox profile() {
+    return SizedBox(
+        width: contentSize == 0
+            ? 1
+            : contentSize.height * (context.isSmall() ? 0.4 : 0.6),
+        height: contentSize == 0
+            ? 1
+            : contentSize.height * (context.isSmall() ? 0.4 : 0.6),
+        child: ProfilePicture());
+  }
+
+  WidgetSize content(BuildContext context) {
+    return WidgetSize(
+        onChange: (size) {
+          setState(() {
+            contentSize = size;
+          });
+        },
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Text(
+                  "Muhammad Ghifari",
+                  style: GoogleFonts.inter(
+                      fontSize: context.isSmall()
+                          ? 24
+                          : context.isMedium()
+                              ? 32
+                              : 44,
+                      color: AppColors.textPrimary,
+                      fontWeight: FontWeight.bold),
+                ),
+                horizontalSpacer(width: 8),
+                SizedBox(
+                    height: context.isSmall()
+                        ? 24
+                        : context.isMedium()
+                            ? 30
+                            : 36,
+                    width: context.isSmall()
+                        ? 20
+                        : context.isMedium()
+                            ? 30
+                            : 36,
+                    child: Image(
+                      image: AssetImage("assets/apple_logo.png"),
+                      color: Colors.black,
+                      fit: BoxFit.cover,
+                    ))
+              ],
+            ),
+            Text(
+              "Mobile Engineer & UI/UX Enthusiast",
+              style: GoogleFonts.inter(
+                  fontSize: context.isSmall()
+                      ? 20
+                      : context.isMedium()
+                          ? 22
+                          : 24,
+                  color: AppColors.textSecondary),
+            ),
+            verticalSpacer(height: 32),
+            Text(
+              "Native Android & iOS Engineer currently working at a SaaS company at Jakarta. Have been in the IT Industry for 3+ years, experienced in building complex applications and have a pretty good eye for design.",
+              style: GoogleFonts.inter(
+                fontSize: context.isSmall()
+                    ? 16
+                    : context.isMedium()
+                        ? 18
+                        : 20,
+                color: AppColors.textTertiary,
+              ),
+            ),
+            verticalSpacer(height: 64),
+            Row(
+              children: [
+                InkWell(
+                  onTap: () {
+                    launchUrlString("https://www.instagram.com/wagyufari/");
+                  },
+                  child: HoveringSocial(
+                    name: "ig",
+                  ),
+                ),
+                horizontalSpacer(width: 8),
+                InkWell(
+                  onTap: () {
+                    launchUrlString("https://www.linkedin.com/in/mayburger/");
+                  },
+                  child: HoveringSocial(
+                    name: "linkedin",
+                  ),
+                ),
+                horizontalSpacer(width: 8),
+                InkWell(
+                  onTap: () {
+                    launchUrlString("https://github.com/wagyufari");
+                  },
+                  child: HoveringSocial(
+                    name: "github",
+                  ),
+                )
+              ],
+            )
+          ],
+        ));
   }
 }
 

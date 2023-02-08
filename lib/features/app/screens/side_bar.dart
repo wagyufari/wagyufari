@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:wagyufari/core/widgets/bloc/global_bloc.dart';
 import 'package:wagyufari/core/widgets/spacer.dart';
 import 'package:wagyufari/features/app/app.dart';
 import 'package:wagyufari/theme.dart';
 import 'package:wagyufari/utils/responsive_widget.dart';
-import 'package:get/get.dart';
+
 
 class SideBar extends StatefulWidget {
   const SideBar({Key? key, required this.selectedIndex}) : super(key: key);
@@ -46,7 +47,7 @@ class _SideBarState extends State<SideBar> with SingleTickerProviderStateMixin {
       listener: (context, state) {
         if (state is PushState) {
           controller.reset();
-          double endWidth = context.screenSize().width * 0.8;
+          double endWidth = 300;
           bool isOpen = state.identifier == SideBar.STATE_OPEN;
           slideAnimation = Tween<double>(
                   begin: isOpen ? 0 : endWidth, end: isOpen ? endWidth : 0)
@@ -118,7 +119,7 @@ class _SideBarState extends State<SideBar> with SingleTickerProviderStateMixin {
   Widget buildItem(String name, int index, String route) => GestureDetector(
     onTap: (){
         if(index != widget.selectedIndex){
-          Get.rootDelegate.toNamed(route);
+          context.go(route);
         }
         SideBar.close(context);
     },

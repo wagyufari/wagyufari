@@ -43,7 +43,7 @@ class GearsScreen extends StatelessWidget {
                                   child: buildColumn(),
                                 ))
                             : Container(
-                                constraints: BoxConstraints(maxWidth: 600),
+                                constraints: BoxConstraints(maxWidth: 1000),
                                 child: buildColumn(),
                               ),
                       ],
@@ -63,41 +63,46 @@ class GearsScreen extends StatelessWidget {
 
   Column buildColumn() {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        verticalSpacer(height: 64),
-        ClipRRect(
-          borderRadius: BorderRadius.circular(32),
-          child: SizedBox(
-            width: 64,
-            height: 64,
-            child: Image(image: AssetImage("assets/profile.jpeg")),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+          verticalSpacer(height: 64),
+          ClipRRect(
+            borderRadius: BorderRadius.circular(32),
+            child: SizedBox(
+              width: 64,
+              height: 64,
+              child: Image(image: AssetImage("assets/profile.jpeg")),
+            ),
           ),
-        ),
-        verticalSpacer(height: 24),
-        Text(
-          "Muhammad Ghifari Yusuf",
-          style: GoogleFonts.inter(
-              fontSize: 38,
-              fontWeight: FontWeight.bold,
-              color: AppColors.textPrimary),
-        ),
-        Text(
-          "Native Android & iOS Engineer @ Happy5",
-          style: GoogleFonts.inter(fontSize: 32, color: AppColors.textPrimary),
-        ),
-        verticalSpacer(height: 16),
-        Text(
-          "Purwakarta, Indonesia",
-          style: GoogleFonts.inter(fontSize: 16, color: AppColors.textPrimary),
-        ),
-        verticalSpacer(height: 64),
-        Container(
-            constraints: BoxConstraints(maxHeight: 800),
-            child: Image(
-              image: AssetImage("assets/setup.jpeg"),
-              fit: BoxFit.cover,
-            )),
+          verticalSpacer(height: 24),
+          Text(
+            "Muhammad Ghifari Yusuf",
+            style: GoogleFonts.inter(
+                fontSize: 38,
+                fontWeight: FontWeight.bold,
+                color: AppColors.textPrimary),
+          ),
+          Text(
+            "Native Android & iOS Engineer @ Happy5",
+            style: GoogleFonts.inter(fontSize: 32, color: AppColors.textPrimary),
+          ),
+          verticalSpacer(height: 16),
+          Text(
+            "Purwakarta, Indonesia",
+            style: GoogleFonts.inter(fontSize: 16, color: AppColors.textPrimary),
+          ),
+          verticalSpacer(height: 64),
+          Container(
+              constraints: BoxConstraints(maxHeight: 800),
+              width: double.infinity,
+              child: Image(
+                image: AssetImage("assets/setup.jpeg"),
+                fit: BoxFit.cover,
+              )),
+        ],),
         verticalSpacer(height: 32),
         _Gears(),
         verticalSpacer(height: 32),
@@ -115,31 +120,10 @@ class _Gears extends StatelessWidget {
       child: Padding(
         padding: EdgeInsets.symmetric(vertical: context.isSmall() ? 16 : 24),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Padding(
-              padding: EdgeInsets.only(right: 32.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    "Gears",
-                    style: GoogleFonts.inter(
-                        color: AppColors.textPrimary,
-                        fontSize: context.isSmall() ? 22 : 28,
-                        fontWeight: FontWeight.bold),
-                  ),
-                  Text(
-                    "All the things I use for my daily work as a Remote Software Engineer",
-                    style: GoogleFonts.inter(
-                        color: AppColors.textPrimary,
-                        fontSize: context.isSmall() ? 16 : 20),
-                  ),
-                ],
-              ),
-            ),
             verticalSpacer(height: 24),
-            _GearsGrid(crossAxisCount: 2, gears: Dummy.gears)
+            _GearsGrid(crossAxisCount: 3, gears: Dummy.gears)
           ],
         ),
       ),
@@ -161,14 +145,18 @@ class _GearsGrid extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    print("Reloaded");
-
     List<TrackSize> trackSize = [];
-    for (var i = 0; i < (gears.length / 2).ceil(); i++) {
+    for (var i = 0; i < (gears.length / crossAxisCount).ceil(); i++) {
       trackSize.add(auto);
     }
+
+    List<TrackSize> columnSize = [];
+    for(var i = 0; i< crossAxisCount; i++){
+      columnSize.add(1.fr);
+    }
+
     return LayoutGrid(
-      columnSizes: [1.fr, 1.fr],
+      columnSizes: columnSize,
       rowSizes: trackSize,
       rowGap: context.isSmall() ? 12 : 24,
       columnGap: context.isSmall() ? 12 : 24,
@@ -189,7 +177,10 @@ class _GearsGrid extends StatelessWidget {
               children: [
                 Padding(
                   padding: const EdgeInsets.all(16.0),
-                  child: Image(image: AssetImage("assets/${gear.imageName}")),
+                  child: SizedBox(
+                    width: double.infinity,
+                      height: 200,
+                      child: Image(image: AssetImage("assets/${gear.imageName}"))),
                 ),
                 Container(
                   width: double.infinity,

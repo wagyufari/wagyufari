@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:wagyufari/core/widgets/spacer.dart';
 import 'package:wagyufari/features/app/app.dart';
 import 'package:wagyufari/theme.dart';
-import 'package:get/get.dart';
+
 import 'package:wagyufari/utils/responsive_widget.dart';
 
 class MainHeader extends StatelessWidget {
@@ -17,78 +18,38 @@ class MainHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(color: Colors.white, boxShadow: [
-        BoxShadow(
-            color: AppColors.neutral_100,
-            spreadRadius: 4,
-            blurRadius: 4,
-            offset: Offset(0, 5))
-      ]),
+      constraints: BoxConstraints(maxWidth: 1000),
       child: Padding(
         padding: EdgeInsets.symmetric(
-            vertical: 20, horizontal: context.isSmall() ? 24 : 64),
+            vertical: 20, horizontal: context.isSmall() ? 24 : 0),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Row(
               children: [
                 Container(
-                  height: 16,
-                  width: 16,
+                  height: 24,
+                  width: 24,
                   decoration: BoxDecoration(
                       color: AppColors.primary,
-                      borderRadius: BorderRadius.circular(8)),
+                      borderRadius: BorderRadius.circular(16)),
                 ),
                 horizontalSpacer(width: 8),
                 Text(
                   "Ghifari",
                   style: GoogleFonts.inter(
-                      fontSize: 16, fontWeight: FontWeight.w600),
+                      fontSize: 24, fontWeight: FontWeight.w600),
                 )
               ],
             ),
-            context.isSmall()
-                ? GestureDetector(
-                    onTap: () {
-                      onTapMenu();
-                    },
-                    child: Icon(
-                      Icons.menu,
-                      size: 28,
-                    ))
-                : Row(
-                    children: [
-                      GestureDetector(
-                        onTap: () {
-                          Get.rootDelegate.toNamed(Routes.HOME);
-                        },
-                        child: Text(
-                          "Home",
-                          style: GoogleFonts.inter(
-                              fontSize: 16,
-                              fontWeight: selectedIndex == 0
-                                  ? FontWeight.bold
-                                  : FontWeight.normal,
-                              color: AppColors.textPrimary),
-                        ),
-                      ),
-                      horizontalSpacer(width: 32),
-                      GestureDetector(
-                        onTap: () {
-                          Get.rootDelegate.toNamed(Routes.GEARS);
-                        },
-                        child: Text(
-                          "Gears",
-                          style: GoogleFonts.inter(
-                              fontSize: 16,
-                              fontWeight: selectedIndex == 1
-                                  ? FontWeight.bold
-                                  : FontWeight.normal,
-                              color: AppColors.textPrimary),
-                        ),
-                      )
-                    ],
-                  ),
+            GestureDetector(
+                onTap: () {
+                  onTapMenu();
+                },
+                child: Icon(
+                  Icons.menu,
+                  size: 28,
+                )),
           ],
         ),
       ),
