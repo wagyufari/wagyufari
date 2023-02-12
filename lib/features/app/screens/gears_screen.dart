@@ -16,46 +16,33 @@ class GearsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SelectionArea(
-      child: Scaffold(
-        body: Stack(
-          children: [
-            Column(
-              children: [
-                MainHeader(
-                  selectedIndex: 1,
-                  onTapMenu: () {
-                    SideBar.open(context);
-                  },
+    return Scaffold(
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 24),
+          child: Column(
+            children: [
+              MainHeader(),
+              SelectionArea(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    context.isSmall()
+                        ? Flexible(
+                            flex: 1,
+                            child: buildColumn())
+                        : Flexible(
+                      flex: 1,
+                          child: Container(
+                              constraints: BoxConstraints(maxWidth: 1000),
+                              child: buildColumn(),
+                            ),
+                        ),
+                  ],
                 ),
-                Flexible(
-                  flex: 1,
-                  child: SingleChildScrollView(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        context.isSmall()
-                            ? Flexible(
-                                flex: 1,
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 16),
-                                  child: buildColumn(),
-                                ))
-                            : Container(
-                                constraints: BoxConstraints(maxWidth: 1000),
-                                child: buildColumn(),
-                              ),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            SideBar(
-              selectedIndex: 1,
-            )
-          ],
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -68,7 +55,7 @@ class GearsScreen extends StatelessWidget {
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-          verticalSpacer(height: 64),
+          verticalSpacer(height: 24),
           ClipRRect(
             borderRadius: BorderRadius.circular(32),
             child: SizedBox(
@@ -123,7 +110,7 @@ class _Gears extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             verticalSpacer(height: 24),
-            _GearsGrid(crossAxisCount: 3, gears: Dummy.gears)
+            _GearsGrid(crossAxisCount: context.isSmall() ? 2 : 3, gears: Dummy.gears)
           ],
         ),
       ),
@@ -176,10 +163,10 @@ class _GearsGrid extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Padding(
-                  padding: const EdgeInsets.all(16.0),
+                  padding: EdgeInsets.all(isSmall ? 8 : 16),
                   child: SizedBox(
                     width: double.infinity,
-                      height: 200,
+                      height: isSmall ? 100 : 200,
                       child: Image(image: AssetImage("assets/${gear.imageName}"))),
                 ),
                 Container(

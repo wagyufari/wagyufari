@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 
 import 'package:google_fonts/google_fonts.dart';
 import 'package:wagyufari/features/app/app.dart';
+import 'package:wagyufari/features/app/screens/coding_screen.dart';
 import 'package:wagyufari/features/app/screens/gears_screen.dart';
 import 'package:wagyufari/features/app/screens/home_screen.dart';
 import 'package:wagyufari/theme.dart';
@@ -55,7 +56,10 @@ final GoRouter _router = GoRouter(
     ),
     GoRoute(
         path: "/gears",
-      pageBuilder: (context, state) => buildPageWithDefaultTransition(context: context, state: state, child: GearsScreen()),)
+      pageBuilder: (context, state) => buildPageWithDefaultTransition(context: context, state: state, child: GearsScreen()),),
+    GoRoute(
+        path: "/coding",
+      pageBuilder: (context, state) => buildPageWithDefaultTransition(context: context, state: state, child: CodingScreen()),)
   ],
   errorBuilder: (context, state) => Scaffold(
     body: Container(child: Text("${state.error.toString()}")),

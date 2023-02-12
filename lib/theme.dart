@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:wagyufari/utils/responsive_widget.dart';
 
 abstract class AppColors {
   static const neutral_0 = Color(0xFFffffff);
@@ -32,11 +33,9 @@ abstract class AppColors {
   static const skyblue_start = Color(0xFF698FBC);
 
   static const linkblue = Color(0xFF072856);
-
 }
 
-
-abstract class AppTheme{
+abstract class AppTheme {
   static const List<BoxShadow>? boxShadow = [
     BoxShadow(
       color: AppColors.neutral_200,
@@ -45,4 +44,30 @@ abstract class AppTheme{
       offset: Offset(0, 1), // changes position of shadow
     )
   ];
+
+  static double textTitle1(BuildContext context) {
+    return context.isSmall()
+        ? 24
+        : context.isMedium()
+            ? 24
+            : 32;
+  }
+
+  static double textBody1(BuildContext context) {
+    return context.isSmall()
+        ? 16
+        : context.isMedium()
+            ? 20
+            : 20;
+  }
+
+  static BoxDecoration boxTheme([double? cornerRadius]) {
+    return BoxDecoration(
+        color: AppColors.neutral_50,
+        border: Border.all(
+          color: AppColors.neutral_300,
+          width: 1,
+        ),
+        borderRadius: BorderRadius.circular(cornerRadius ?? 24));
+  }
 }

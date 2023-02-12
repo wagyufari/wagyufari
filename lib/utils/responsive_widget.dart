@@ -9,6 +9,9 @@ extension Responsive on BuildContext{
   bool isSmall(){
     return MediaQuery.of(this).size.width < 800;
   }
+  bool isMobile(){
+    return MediaQuery.of(this).size.width < 600;
+  }
   bool isMedium(){
     return MediaQuery.of(this).size.width >= 800 &&
         MediaQuery.of(this).size.width <= 1000;

@@ -14,7 +14,5 @@ void main() async {
   await di.init();
   usePathUrlStrategy();
   runApp(Phoenix(child: App()));
-
-
   // runApp(Phoenix(child: Web(storeId: -1)));
 }
